@@ -20,11 +20,4 @@ public class AuthResponse extends ResponseBase {
         this.ssid = ssid;
     }
 
-    @Override
-    public String toString() {
-        return "AuthResponse {" +
-                "ssid='" + ssid + '\'' +
-                ", status='" + getStatus() + '\''+
-                '}';
-    }
 }
