@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.view.View;
+import android.view.View.OnClickListener;
 
 
 import com.example.alexcon.dsrclient.R;
@@ -21,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ApiService mAPIService;
     private RestApiClient client;
-    private AlertDialog.Builder dialog;
     private EventBus eventBus;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,20 +29,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         eventBus = EventBus.getDefault();
         eventBus.register(this);
-        dialog = new AlertDialog.Builder(this);
         client = new RestApiClient("https://10.0.2.2:9991/");
 
         Button btn = (Button) findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                eventBus.post(new AuthRequest("0.13-dev", "admin", "admin"));
-            }
-        }
-        );
+        btn.setOnClickListener(btn_OnClickListener);
 
     }
+    final OnClickListener btn_OnClickListener = new OnClickListener() {
+        public void onClick(final View v) {
+            switch(v.getId()) {
+                case R.id.button:
+                eventBus.post(new AuthRequest("0.13-dev", "admin", "admin"));
+                    break;
+            }
+        }
+    };
     @Subscribe
     public void onError(ErrorEvent event){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage("error.\n" + event.getMessage());
         dialog.setPositiveButton("Ok", null);
         dialog.show();
